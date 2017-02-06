@@ -110,10 +110,6 @@ function run() {
 *
 * @access public
 */
-function grivna($kop){
-if ($kop=="2" or $kop=="3" or $kop=="4") return "гривны";
-else return "гривен";
-}
 
 function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11';

@@ -2,8 +2,8 @@
 /**
 * ExchangeRates 
 * @package project
-* @author Wizard <sergejey@gmail.com>
-* @copyright http://majordomo.smartliving.ru/ (c)
+* @author Alex Sokolov <admin@gelezako.com>
+* @copyright Alex Sokolov http://www.xa-xa.pp.ua (c)
 * @version 0.1 (wizard, 10:02:10 [Feb 06, 2017])
 */
 //

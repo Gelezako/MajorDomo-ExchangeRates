@@ -4,12 +4,10 @@
 
 Для того что бы озвучить курс валют (у меня это происходит автоматически каждое утро в заданное время, либо по команде "курс валют"), необходимо создать сценарий и шаблон поведения. Код для сценария, который озвучивает курсы можно найти в проекте сценариев для MajorDomo https://github.com/Gelezako/MajorDomo-Scenarios
 
+Другие модули для MajorDomo:
 
 Цены на топливо
 https://github.com/Gelezako/MajorDomo-AZS
 
 Модуль для лампы MiLight
 https://github.com/Gelezako/MajorDomo-MiLight
-
-Сценарии для проекта Majordomo
-https://github.com/Gelezako/MajorDomo-Scenarios

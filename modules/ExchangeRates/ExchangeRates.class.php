@@ -18,7 +18,7 @@ class ExchangeRates extends module {
 */
 function ExchangeRates() {
   $this->name="ExchangeRates";
-  $this->title="Курс валют";
+  $this->title="Курс валют от ПриватБанка";
   $this->module_category="<#LANG_SECTION_APPLICATIONS#>";
   $this->checkInstalled();
 }

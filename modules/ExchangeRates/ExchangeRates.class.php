@@ -205,6 +205,17 @@ function usual(&$out) {
 	addClassProperty('Rate', 'rursale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
   parent::install();
  }
+	
+public function uninstall()
+   {
+      SQLExec("delete from pvalues where property_id in (select id FROM properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates')))");
+      SQLExec("delete from properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates'))");
+      SQLExec("delete from objects where class_id = (select id from classes where title = 'ExchangeRates')");
+      SQLExec("delete from classes where title = 'ExchangeRates'");
+      
+      parent::uninstall();
+   }
+	
 // --------------------------------------------------------------------
 }
 /*

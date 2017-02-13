@@ -112,52 +112,57 @@ function run() {
 */
 
 function admin(&$out) {
-	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11';
+  libxml_use_internal_errors(true);
+	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
+
 	$xml = simplexml_load_file($url);
+  if (!$xml) {
+     $out["notification"]="Невозможно получить данные";
+     }
+     else{
+        global $euro;
+        if(isset($euro)){ 
+        $i=0;
+        //получаем курс евро
+        foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
+          if($i==2){
 
- global $euro;
- if(isset($euro)){ 
-$i=0;
-//получаем курс евро
-foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
-if($i==2){
+            sg("Rate.eurobuy",round((float)$exchangerate,1));
+          }
+          else if($i==3){
+          sg("Rate.eurosale",round((float)$exchangerate,1));
+          }
+          ++$i;
+        }}
 
-  sg("Rate.eurobuy",round((float)$exchangerate,1));
-}
-else if($i==3){
-sg("Rate.eurosale",round((float)$exchangerate,1));
-}
-++$i;
+
+        global $usd;
+        if(isset($usd)){ 
+        //получаем курс доллара
+        $j=0;
+        foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
+          if($j==2){
+          sg("Rate.usdbuy",round((float)$exchangerate,1));
+          }
+          else if($j==3){
+          sg("Rate.usdsale",round((float)$exchangerate,1));
+          }
+          ++$j;
+        }}
+        global $rur;
+        if(isset($rur)){
+        //получаем курс рубля
+        $k=0;
+        foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
+          if($k==2){
+          sg("Rate.rurbuy",round((float)$exchangerate,2));
+          }
+          else if($k==3){
+          sg("Rate.rursale",round((float)$exchangerate,2));
+          }
+          ++$k;
+        }}   
 }}
-
- global $usd;
- if(isset($usd)){ 
-//получаем курс доллара
-$j=0;
-foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
-if($j==2){
-sg("Rate.usdbuy",round((float)$exchangerate,1));
-}
-else if($j==3){
-sg("Rate.usdsale",round((float)$exchangerate,1));
-}
-++$j;
-}}
- global $rur;
- if(isset($rur)){
-//получаем курс рубля
-$k=0;
-foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
-if($k==2){
-sg("Rate.rurbuy",round((float)$exchangerate,2));
-}
-else if($k==3){
-sg("Rate.rursale",round((float)$exchangerate,2));
-}
-++$k;
- }}
-
-}
 /**
 * FrontEnd
 *
@@ -205,8 +210,8 @@ function usual(&$out) {
 	addClassProperty('Rate', 'rursale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
   parent::install();
  }
-	
-public function uninstall()
+
+  public function uninstall()
    {
       SQLExec("delete from pvalues where property_id in (select id FROM properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates')))");
       SQLExec("delete from properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates'))");
@@ -215,7 +220,6 @@ public function uninstall()
       
       parent::uninstall();
    }
-	
 // --------------------------------------------------------------------
 }
 /*

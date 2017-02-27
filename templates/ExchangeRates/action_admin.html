@@ -8,24 +8,42 @@
 <input type="hidden" name="mode" value="update"><br>
 
 <h3>Выберите тип валюты,<br> который хотите получить</h3><br><br>
-
 <div class="form-group">
-	<label class="col-md-3">Евро</label>
+	<h3>Крммерческий курс ПриватБанка</h3>
+	<label class="col-md-3">Пара: Евро\Гривна</label>
+	<label class="col-md-3"><#eurobuy#>\<#eurosale#></label>
 	<div class="col-md-3">
-	<input type="checkbox" name="euro" checked></div><br><br><br>
+	<input type="checkbox" name="eurohr" checked>
+	</div><br><br><br>
 	
-	<label class="col-md-3">Доллар</label>
+	<label class="col-md-3">Пара: Доллар\Гривна</label>
+	<label class="col-md-3"><#usdbuy#>\<#usdsale#></label>
 	<div class="col-md-3">
-	<input type="checkbox" name="usd" checked></div><br><br><br>
+	<input type="checkbox" name="usdhr" checked></div><br><br><br>
 	
-	<label class="col-md-3">Рубль</label>
+	<label class="col-md-3">Пара: Рубль\Гривна</label>
+	<label class="col-md-3"><#rurbuy#>\<#rursale#></label>
 	<div class="col-md-3">
-	<input type="checkbox" name="rur" checked></div><br><br><br>
+	<input type="checkbox" name="rurhr" checked></div><br><br><br>
+	<font color="red" size="4"><#notification#></font>
+
+    <h3>Банк России</h3>
+	<label class="col-md-3">Пара: Доллар\Рубль</label>
+	<label class="col-md-3"><#dollarrur#></label>
+	<div class="col-md-3">
+	<input type="checkbox" name="dollarrur" checked></div><br><br><br>
+	
+	<label class="col-md-3">Пара: Евро\Рубль</label>
+	<label class="col-md-3"><#eurorur#></label>
+	<div class="col-md-3">
+	<input type="checkbox" name="eurorur" checked></div><br><br><br>
 	
 	
     <button type="submit" name="subm" value="settings" class="btn btn-primary">Сохранить</button>
 	<button type="submit" name="subm1" value="song" class="btn btn-primary" disabled="disabled">Озвучить</button><br>
-	</div><br><font color="red" size="4">[#notification#]</font>
+	</div><br>
+	<font color="red" size="4"><#notification2#></font>
+	
 	</div>
 	</fieldset>
 </form><br>

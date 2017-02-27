@@ -18,7 +18,7 @@ class ExchangeRates extends module {
 */
 function ExchangeRates() {
   $this->name="ExchangeRates";
-  $this->title="Курс валют от ПриватБанка";
+  $this->title="Курс валют";
   $this->module_category="<#LANG_SECTION_APPLICATIONS#>";
   $this->checkInstalled();
 }
@@ -117,52 +117,84 @@ function admin(&$out) {
 
 	$xml = simplexml_load_file($url);
   if (!$xml) {
-     $out["notification"]="Невозможно получить данные";
+     $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{
-        global $euro;
-        if(isset($euro)){ 
+        global $eurohr;
+        if(isset($eurohr)){ 
         $i=0;
         //получаем курс евро
         foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
           if($i==2){
-
             sg("Rate.eurobuy",round((float)$exchangerate,1));
+            $out["eurobuy"]=round((float)$exchangerate,1);
           }
           else if($i==3){
           sg("Rate.eurosale",round((float)$exchangerate,1));
+          $out["eurosale"]=round((float)$exchangerate,1);
           }
           ++$i;
         }}
 
 
-        global $usd;
-        if(isset($usd)){ 
+        global $usdhr;
+        if(isset($usdhr)){ 
         //получаем курс доллара
         $j=0;
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
           sg("Rate.usdbuy",round((float)$exchangerate,1));
+          $out["usdbuy"]=round((float)$exchangerate,1);
           }
           else if($j==3){
           sg("Rate.usdsale",round((float)$exchangerate,1));
+          $out["usdsale"]=round((float)$exchangerate,1);
           }
           ++$j;
         }}
-        global $rur;
-        if(isset($rur)){
+
+        global $rurhr;
+        if(isset($rurhr)){
         //получаем курс рубля
         $k=0;
         foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
           if($k==2){
           sg("Rate.rurbuy",round((float)$exchangerate,2));
+          $out["rurbuy"]=round((float)$exchangerate,2);
           }
           else if($k==3){
           sg("Rate.rursale",round((float)$exchangerate,2));
+          $out["rursale"]=round((float)$exchangerate,2);
           }
           ++$k;
         }}   
-}}
+
+    } //Конец парсинга хмл от ПриватБанка
+
+// Начало парсинга хмл банка России
+  global $dollarrur,$eurorur;
+  $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
+      if (!$file) {
+        $out["notification2"]="Невозможно получить курс валют Банка России";
+        }
+     else{ 
+        if(isset($dollarrur)){
+            $xml = $file->xpath("//Valute[@ID='R01235']");
+            $valute = strval($xml[0]->Value);
+            $dollar = str_replace(",",".",$valute);
+            sg("Rate.dollarrur",round((float)$dollar,2));
+            $out["dollarrur"]=round((float)$dollar,2);
+        }
+        if(isset($eurorur)){
+            $xml = $file->xpath("//Valute[@ID='R01239']");
+            $valute = strval($xml[0]->Value);
+            $euro = str_replace(",",".",$valute);
+            sg("Rate.eurorur",round((float)$euro,2));
+            $out["eurorur"]=round((float)$euro,2);
+        }
+    }
+    
+}
 /**
 * FrontEnd
 *
@@ -183,7 +215,7 @@ function usual(&$out) {
  function install($data='') {
 	 $className = 'ExchangeRates'; //имя класса
  $objectName = array('Rate');//имя обьектов
- $objDescription = array('Курс валют от ПриватБанка');
+ $objDescription = array('Курс валют');
  $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  
     if (!$rec['ID']) {
@@ -208,6 +240,9 @@ function usual(&$out) {
 	addClassProperty('Rate', 'usdsale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
 	addClassProperty('Rate', 'rurbuy', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
 	addClassProperty('Rate', 'rursale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
+
+  addClassProperty('Rate', 'eurorur', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
+	addClassProperty('Rate', 'dollarrur', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
   parent::install();
  }
 

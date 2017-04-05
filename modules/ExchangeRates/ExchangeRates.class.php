@@ -116,7 +116,7 @@ function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 
 	$xml = simplexml_load_file($url);
-  if(!empty($xml)){
+  if (!$xml) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{
@@ -134,15 +134,13 @@ function admin(&$out) {
           $out["eurosale"]=round((float)$exchangerate,1);
           }
           ++$i;
-        }
-     }
+        }}
 
 
         global $usdhr;
         if(isset($usdhr)){ 
         //получаем курс доллара
         $j=0;
-		
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
           sg("Rate.usdbuy",round((float)$exchangerate,1));

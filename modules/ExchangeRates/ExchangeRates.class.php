@@ -116,7 +116,7 @@ function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 
 	$xml = simplexml_load_file($url);
-  if (!$xml) {
+  if (empty($xml)) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{
@@ -174,7 +174,7 @@ function admin(&$out) {
 // Начало парсинга хмл банка России
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-      if (!$file) {
+      if (empty($file)) {
         $out["notification2"]="Невозможно получить курс валют Банка России";
         }
      else{ 

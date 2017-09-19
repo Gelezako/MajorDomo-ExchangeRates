@@ -116,7 +116,7 @@ function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 
 	$xml = simplexml_load_file($url);
-  if (empty($xml)) {
+  if (empty($xml) or !$xml) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{

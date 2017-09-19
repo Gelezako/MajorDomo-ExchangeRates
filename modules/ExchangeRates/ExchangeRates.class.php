@@ -174,7 +174,7 @@ function admin(&$out) {
 // Начало парсинга хмл банка России
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-      if (empty($file)) {
+      if (empty($file) or !$xml) {
         $out["notification2"]="Невозможно получить курс валют Банка России";
         }
      else{ 

@@ -214,9 +214,8 @@ function usual(&$out) {
 */
  function install($data='') {
 	 $className = 'ExchangeRates'; //имя класса
- $objectName = array('Rate');//имя обьектов
- $objDescription = array('Курс валют');
- $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
+	 $objDescription = array('Курс валют');
+	 $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  
     if (!$rec['ID']) {
         $rec = array();
@@ -234,15 +233,7 @@ function usual(&$out) {
             $obj_rec['ID'] = SQLInsert('objects', $obj_rec);
         }
     }
-	addClassProperty('Rate', 'eurobuy', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'eurosale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'usdbuy', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'usdsale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'rurbuy', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'rursale', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
 
-  addClassProperty('Rate', 'eurorur', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
-	addClassProperty('Rate', 'dollarrur', 'include_once(DIR_MODULES."ExchangeRates/ExchangeRates.class.php");');
   parent::install();
  }
 

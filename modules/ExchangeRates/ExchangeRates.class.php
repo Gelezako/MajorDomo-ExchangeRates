@@ -3,7 +3,7 @@
 * ExchangeRates 
 * @package project
 * @author Alex Sokolov <admin@gelezako.com>
-* @copyright Alex Sokolov http://www.xa-xa.pp.ua (c)
+* @copyright Alex Sokolov http://blog.gelezako.com (c)
 * @version 0.1 (wizard, 10:02:10 [Feb 06, 2017])
 */
 //
@@ -16,7 +16,7 @@ class ExchangeRates extends module {
 *
 * @access private
 */
-function ExchangeRates() {
+public function ExchangeRates() {
   $this->name="ExchangeRates";
   $this->title="Курс валют";
   $this->module_category="<#LANG_SECTION_APPLICATIONS#>";
@@ -29,7 +29,7 @@ function ExchangeRates() {
 *
 * @access public
 */
-function saveParams($data=0) {
+public function saveParams($data=0) {
  $p=array();
  if (IsSet($this->id)) {
   $p["id"]=$this->id;
@@ -52,7 +52,7 @@ function saveParams($data=0) {
 *
 * @access public
 */
-function getParams() {
+public function getParams() {
   global $id;
   global $mode;
   global $view_mode;
@@ -81,7 +81,7 @@ function getParams() {
 *
 * @access public
 */
-function run() {
+public function run() {
  global $session;
   $out=array();
   if ($this->action=='admin') {
@@ -111,12 +111,78 @@ function run() {
 * @access public
 */
 
-function admin(&$out) {
-  libxml_use_internal_errors(true);
+protected function SetAutoUpdate()
+   {
+       injectObjectMethodCode('ClockChime.onNewHour','ExchangeRates','
+       include_once(DIR_MODULES . "ExchangeRates/ExchangeRates.class.php");
+       $app_exRate = new ExchangeRates();
+       $app_exRate->SaveAutoUpdate();
+'); 
+   }
+
+public function SaveAutoUpdate(){
+	libxml_use_internal_errors(true);
+	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
+	$xml = @simplexml_load_file($url);
+	if ($xml) {
+        $i=0;
+        //получаем курс евро
+        foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
+          if($i==2){
+            sg("Rate.eurobuy",round((float)$exchangerate,1));
+          }
+          else if($i==3){
+          sg("Rate.eurosale",round((float)$exchangerate,1));
+          }
+          ++$i;
+        }
+		
+		//получаем курс доллара
+		$j=0;
+        foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
+          if($j==2){
+          sg("Rate.usdbuy",round((float)$exchangerate,1));
+          }
+          else if($j==3){
+          sg("Rate.usdsale",round((float)$exchangerate,1));
+          }
+          ++$j;
+        }
+		
+		//получаем курс рубля
+		$k=0;
+        foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
+          if($k==2){
+          sg("Rate.rurbuy",round((float)$exchangerate,2));
+          }
+          else if($k==3){
+          sg("Rate.rursale",round((float)$exchangerate,2));
+          }
+          ++$k;
+        }
+     }
+	 
+	   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
+      if ($file) {
+            $xml = $file->xpath("//Valute[@ID='R01235']");
+            $valute = strval($xml[0]->Value);
+            $dollar = str_replace(",",".",$valute);
+            sg("Rate.dollarrur",round((float)$dollar,2));
+
+			$xml = $file->xpath("//Valute[@ID='R01239']");
+            $valute = strval($xml[0]->Value);
+            $euro = str_replace(",",".",$valute);
+            sg("Rate.eurorur",round((float)$euro,2));
+        }
+
+}
+
+public function admin(&$out) {
+    libxml_use_internal_errors(true);
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 
-	$xml = simplexml_load_file($url);
-  if (empty($xml) or !$xml) {
+	$xml = @simplexml_load_file($url);
+  if (!$xml) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{
@@ -174,7 +240,7 @@ function admin(&$out) {
 // Начало парсинга хмл банка России
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-      if (empty($file) or !$xml) {
+      if (!$file) {
         $out["notification2"]="Невозможно получить курс валют Банка России";
         }
      else{ 
@@ -202,7 +268,7 @@ function admin(&$out) {
 *
 * @access public
 */
-function usual(&$out) {
+public function usual(&$out) {
  $this->admin($out);
 }
 /**
@@ -212,10 +278,11 @@ function usual(&$out) {
 *
 * @access private
 */
- function install($data='') {
+public function install($data='') {
 	 $className = 'ExchangeRates'; //имя класса
-	 $objDescription = array('Курс валют');
-	 $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
+ //$objectName = array('Rate');//имя обьектов
+ $objDescription = array('Курс валют');
+ $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  
     if (!$rec['ID']) {
         $rec = array();
@@ -233,11 +300,12 @@ function usual(&$out) {
             $obj_rec['ID'] = SQLInsert('objects', $obj_rec);
         }
     }
-
+  injectObjectMethodCode('ClockChime.onNewHour','AZS','include_once(DIR_MODULES . "AZS/AZS.class.php")');
+  $this->SetAutoUpdate();
   parent::install();
  }
 
-  public function uninstall()
+public function uninstall()
    {
       SQLExec("delete from pvalues where property_id in (select id FROM properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates')))");
       SQLExec("delete from properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates'))");

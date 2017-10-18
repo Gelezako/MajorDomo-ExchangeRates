@@ -300,7 +300,7 @@ public function install($data='') {
             $obj_rec['ID'] = SQLInsert('objects', $obj_rec);
         }
     }
-  injectObjectMethodCode('ClockChime.onNewHour','AZS','include_once(DIR_MODULES . "AZS/AZS.class.php")');
+  
   $this->SetAutoUpdate();
   parent::install();
  }

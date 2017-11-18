@@ -280,7 +280,7 @@ public function usual(&$out) {
 */
 public function install($data='') {
 	 $className = 'ExchangeRates'; //имя класса
- //$objectName = array('Rate');//имя обьектов
+ $objectName = array('Rate');//имя обьектов
  $objDescription = array('Курс валют');
  $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  

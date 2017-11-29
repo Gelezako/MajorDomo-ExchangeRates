@@ -178,11 +178,11 @@ public function SaveAutoUpdate(){
 }
 
 public function admin(&$out) {
+	global $date1,$date2,$date; //время последнего обновления курсов
     libxml_use_internal_errors(true);
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
-
 	$xml = @simplexml_load_file($url);
-  if (!$xml) {
+    if (!$xml) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
      }
      else{
@@ -234,7 +234,8 @@ public function admin(&$out) {
           }
           ++$k;
         }}   
-
+    sg("Rate.date1",date("Y-m-d H:i:s"));
+	$out["date1"]=date("Y-m-d H:i:s");
     } //Конец парсинга хмл от ПриватБанка
 
 // Начало парсинга хмл банка России
@@ -258,9 +259,44 @@ public function admin(&$out) {
             sg("Rate.eurorur",round((float)$euro,2));
             $out["eurorur"]=round((float)$euro,2);
         }
+	sg("Rate.date2",date("Y-m-d H:i:s"));
+	$out["date2"]=date("Y-m-d H:i:s");
     }
     
+	
+	// Начало парсинга курсов от Минфин
+	global $euronbu,$usdnbu,$rurnbu;
+    ini_set("user_agent","MajorDomo-ExchangeRates/0.1");
+	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
+	$file_nbu = json_decode($file_nbu);
+		  if (!$file_nbu) {
+			$out["notification3"]="Невозможно получить курс валют НБУ";
+			}
+		 else{ 
+			if(isset($usdnbu)){
+				$d=$file_nbu->usd->ask;
+				sg("Rate.usdnbu",round((float)$d,2));
+				$out["usdnbu"]=round((float)$d,2);
+			}
+			if(isset($euronbu)){	
+				sg("Rate.euronbu",round((float)$file_nbu->eur->ask,2));
+				$out["euronbu"]=round((float)$file_nbu->eur->ask,2);
+			}
+			if(isset($rurnbu)){
+				sg("Rate.rurnbu",round((float)$file_nbu->rub->ask,2));
+				$out["rurnbu"]=round((float)$file_nbu->rub->ask,2);
+			}
+		sg("Rate.date3",date("Y-m-d H:i:s"));
+	    $out["date3"]=date("Y-m-d H:i:s");
+		}
+
+	//Конец парсинга курсов от Минфин
+	
 }
+
+
+
+
 /**
 * FrontEnd
 *

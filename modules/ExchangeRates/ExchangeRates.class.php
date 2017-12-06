@@ -111,6 +111,7 @@ public function run() {
 * @access public
 */
 
+/*
 protected function SetAutoUpdate()
    {
        injectObjectMethodCode('ClockChime.onNewHour','ExchangeRates','
@@ -119,8 +120,11 @@ protected function SetAutoUpdate()
        $app_exRate->SaveAutoUpdate();
 '); 
    }
+   
+*/
 
 public function SaveAutoUpdate(){
+	//Начало парсинга Приватбанк АПИ
 	libxml_use_internal_errors(true);
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 	$xml = @simplexml_load_file($url);
@@ -160,21 +164,38 @@ public function SaveAutoUpdate(){
           }
           ++$k;
         }
+	  sg("Rate.date1",date("Y-m-d H:i:s"));
      }
+	 //Конец парсинга Приватбанк АПИ
 	 
-	   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-      if ($file) {
-            $xml = $file->xpath("//Valute[@ID='R01235']");
-            $valute = strval($xml[0]->Value);
-            $dollar = str_replace(",",".",$valute);
-            sg("Rate.dollarrur",round((float)$dollar,2));
+	//Начало парсинга ЦБР
+	$file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
+		  if ($file) {
+				$xml = $file->xpath("//Valute[@ID='R01235']");
+				$valute = strval($xml[0]->Value);
+				$dollar = str_replace(",",".",$valute);
+				sg("Rate.dollarrur",round((float)$dollar,2));
 
-			$xml = $file->xpath("//Valute[@ID='R01239']");
-            $valute = strval($xml[0]->Value);
-            $euro = str_replace(",",".",$valute);
-            sg("Rate.eurorur",round((float)$euro,2));
-        }
-
+				$xml = $file->xpath("//Valute[@ID='R01239']");
+				$valute = strval($xml[0]->Value);
+				$euro = str_replace(",",".",$valute);
+				sg("Rate.eurorur",round((float)$euro,2));
+				sg("Rate.date2",date("Y-m-d H:i:s"));
+			}
+    //Конец парсинга ЦБР
+			
+	// Начало парсинга курсов от Минфин
+    ini_set("user_agent","MajorDomo-ExchangeRates/0.1");
+	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
+	$file_nbu = json_decode($file_nbu);
+		  if ($file_nbu){ 
+				$d=$file_nbu->usd->ask;
+				sg("Rate.usdnbu",round((float)$d,2));	
+				sg("Rate.euronbu",round((float)$file_nbu->eur->ask,2));
+				sg("Rate.rurnbu",round((float)$file_nbu->rub->ask,2));
+				sg("Rate.date3",date("Y-m-d H:i:s"));
+		  }
+	//Конец парсинга курсов от Минфин		
 }
 
 public function admin(&$out) {
@@ -289,7 +310,6 @@ public function admin(&$out) {
 		sg("Rate.date3",date("Y-m-d H:i:s"));
 	    $out["date3"]=date("Y-m-d H:i:s");
 		}
-
 	//Конец парсинга курсов от Минфин
 	
 }
@@ -315,7 +335,7 @@ public function usual(&$out) {
 * @access private
 */
 public function install($data='') {
-	 $className = 'ExchangeRates'; //имя класса
+ $className = 'ExchangeRates'; //имя класса
  $objectName = array('Rate');//имя обьектов
  $objDescription = array('Курс валют');
  $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
@@ -337,10 +357,18 @@ public function install($data='') {
         }
     }
   
-  $this->SetAutoUpdate();
+  //$this->SetAutoUpdate();
+  subscribeToEvent($this->name, 'HOURLY'); //событие HOURLY которое совершается раз в час
   parent::install();
  }
 
+ function processSubscription($event_name, $details='') {
+        if ($event_name=='HOURLY') {
+			$this->SaveAutoUpdate();
+			say("выполняю обновление курсов валют",2);
+        }
+    }
+ 
 public function uninstall()
    {
       SQLExec("delete from pvalues where property_id in (select id FROM properties where object_id in (select id from objects where class_id = (select id from classes where title = 'ExchangeRates')))");
@@ -348,6 +376,7 @@ public function uninstall()
       SQLExec("delete from objects where class_id = (select id from classes where title = 'ExchangeRates')");
       SQLExec("delete from classes where title = 'ExchangeRates'");
       
+	  unsubscribeFromEvent($this->name, 'HOURLY');
       parent::uninstall();
    }
 // --------------------------------------------------------------------

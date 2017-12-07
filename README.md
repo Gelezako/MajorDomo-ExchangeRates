@@ -7,13 +7,3 @@
 Настройка: Содержимаое паки modules положить в одноимённую папку проекта MajorDomo. Тоже самое, содержимое папки templates положить в папку templates проекта MajorDomo. Зайти в раздел "Модули", найти модуль "ExchangeRates", выбрать его и нажать "Install". После скачивания обновления, необходимо нажать "ReInstall".
 
 Видео уроки по настройке плагинов и сценариев: https://www.youtube.com/playlist?list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E
-
-Другие модули для MajorDomo:
-
-Цены на топливо
-https://github.com/Gelezako/MajorDomo-AZS
-
-Модуль для лампы MiLight
-https://github.com/Gelezako/MajorDomo-MiLight
-
-Сценарии для озвучивания кусра валют

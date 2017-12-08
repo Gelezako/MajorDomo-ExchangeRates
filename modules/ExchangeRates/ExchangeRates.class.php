@@ -133,10 +133,10 @@ public function SaveAutoUpdate(){
         //получаем курс евро
         foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
           if($i==2){
-            sg("Rate.eurobuy",round((float)$exchangerate,1));
+            sg("exchange_rate.eurobuy",round((float)$exchangerate,1));
           }
           else if($i==3){
-          sg("Rate.eurosale",round((float)$exchangerate,1));
+          sg("exchange_rate.eurosale",round((float)$exchangerate,1));
           }
           ++$i;
         }
@@ -145,10 +145,10 @@ public function SaveAutoUpdate(){
 		$j=0;
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
-          sg("Rate.usdbuy",round((float)$exchangerate,1));
+          sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
           }
           else if($j==3){
-          sg("Rate.usdsale",round((float)$exchangerate,1));
+          sg("exchange_rate.usdsale",round((float)$exchangerate,1));
           }
           ++$j;
         }
@@ -157,14 +157,14 @@ public function SaveAutoUpdate(){
 		$k=0;
         foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
           if($k==2){
-          sg("Rate.rurbuy",round((float)$exchangerate,2));
+          sg("exchange_rate.rurbuy",round((float)$exchangerate,2));
           }
           else if($k==3){
-          sg("Rate.rursale",round((float)$exchangerate,2));
+          sg("exchange_rate.rursale",round((float)$exchangerate,2));
           }
           ++$k;
         }
-	  sg("Rate.date1",date("Y-m-d H:i:s"));
+	  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
      }
 	 //Конец парсинга Приватбанк АПИ
 	 
@@ -174,13 +174,13 @@ public function SaveAutoUpdate(){
 				$xml = $file->xpath("//Valute[@ID='R01235']");
 				$valute = strval($xml[0]->Value);
 				$dollar = str_replace(",",".",$valute);
-				sg("Rate.dollarrur",round((float)$dollar,2));
+				sg("exchange_rate.dollarrur",round((float)$dollar,2));
 
 				$xml = $file->xpath("//Valute[@ID='R01239']");
 				$valute = strval($xml[0]->Value);
 				$euro = str_replace(",",".",$valute);
-				sg("Rate.eurorur",round((float)$euro,2));
-				sg("Rate.date2",date("Y-m-d H:i:s"));
+				sg("exchange_rate.eurorur",round((float)$euro,2));
+				sg("exchange_rate.date2",date("Y-m-d H:i:s"));
 			}
     //Конец парсинга ЦБР
 			
@@ -190,10 +190,10 @@ public function SaveAutoUpdate(){
 	$file_nbu = json_decode($file_nbu);
 		  if ($file_nbu){ 
 				$d=$file_nbu->usd->ask;
-				sg("Rate.usdnbu",round((float)$d,2));	
-				sg("Rate.euronbu",round((float)$file_nbu->eur->ask,2));
-				sg("Rate.rurnbu",round((float)$file_nbu->rub->ask,2));
-				sg("Rate.date3",date("Y-m-d H:i:s"));
+				sg("exchange_rate.usdnbu",round((float)$d,2));	
+				sg("exchange_rate.euronbu",round((float)$file_nbu->eur->ask,2));
+				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
+				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
 		  }
 	//Конец парсинга курсов от Минфин		
 }
@@ -213,11 +213,11 @@ public function admin(&$out) {
         //получаем курс евро
         foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
           if($i==2){
-            sg("Rate.eurobuy",round((float)$exchangerate,1));
+            sg("exchange_rate.eurobuy",round((float)$exchangerate,1));
             $out["eurobuy"]=round((float)$exchangerate,1);
           }
           else if($i==3){
-          sg("Rate.eurosale",round((float)$exchangerate,1));
+          sg("exchange_rate.eurosale",round((float)$exchangerate,1));
           $out["eurosale"]=round((float)$exchangerate,1);
           }
           ++$i;
@@ -230,11 +230,11 @@ public function admin(&$out) {
         $j=0;
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
-          sg("Rate.usdbuy",round((float)$exchangerate,1));
+          sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
           $out["usdbuy"]=round((float)$exchangerate,1);
           }
           else if($j==3){
-          sg("Rate.usdsale",round((float)$exchangerate,1));
+          sg("exchange_rate.usdsale",round((float)$exchangerate,1));
           $out["usdsale"]=round((float)$exchangerate,1);
           }
           ++$j;
@@ -246,16 +246,16 @@ public function admin(&$out) {
         $k=0;
         foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
           if($k==2){
-          sg("Rate.rurbuy",round((float)$exchangerate,2));
+          sg("exchange_rate.rurbuy",round((float)$exchangerate,2));
           $out["rurbuy"]=round((float)$exchangerate,2);
           }
           else if($k==3){
-          sg("Rate.rursale",round((float)$exchangerate,2));
+          sg("exchange_rate.rursale",round((float)$exchangerate,2));
           $out["rursale"]=round((float)$exchangerate,2);
           }
           ++$k;
         }}   
-    sg("Rate.date1",date("Y-m-d H:i:s"));
+    sg("exchange_rate.date1",date("Y-m-d H:i:s"));
 	$out["date1"]=date("Y-m-d H:i:s");
     } //Конец парсинга хмл от ПриватБанка
 
@@ -270,17 +270,17 @@ public function admin(&$out) {
             $xml = $file->xpath("//Valute[@ID='R01235']");
             $valute = strval($xml[0]->Value);
             $dollar = str_replace(",",".",$valute);
-            sg("Rate.dollarrur",round((float)$dollar,2));
+            sg("exchange_rate.dollarrur",round((float)$dollar,2));
             $out["dollarrur"]=round((float)$dollar,2);
         }
         if(isset($eurorur)){
             $xml = $file->xpath("//Valute[@ID='R01239']");
             $valute = strval($xml[0]->Value);
             $euro = str_replace(",",".",$valute);
-            sg("Rate.eurorur",round((float)$euro,2));
+            sg("exchange_rate.eurorur",round((float)$euro,2));
             $out["eurorur"]=round((float)$euro,2);
         }
-	sg("Rate.date2",date("Y-m-d H:i:s"));
+	sg("exchange_rate.date2",date("Y-m-d H:i:s"));
 	$out["date2"]=date("Y-m-d H:i:s");
     }
     
@@ -296,18 +296,18 @@ public function admin(&$out) {
 		 else{ 
 			if(isset($usdnbu)){
 				$d=$file_nbu->usd->ask;
-				sg("Rate.usdnbu",round((float)$d,2));
+				sg("exchange_rate.usdnbu",round((float)$d,2));
 				$out["usdnbu"]=round((float)$d,2);
 			}
 			if(isset($euronbu)){	
-				sg("Rate.euronbu",round((float)$file_nbu->eur->ask,2));
+				sg("exchange_rate.euronbu",round((float)$file_nbu->eur->ask,2));
 				$out["euronbu"]=round((float)$file_nbu->eur->ask,2);
 			}
 			if(isset($rurnbu)){
-				sg("Rate.rurnbu",round((float)$file_nbu->rub->ask,2));
+				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
 				$out["rurnbu"]=round((float)$file_nbu->rub->ask,2);
 			}
-		sg("Rate.date3",date("Y-m-d H:i:s"));
+		sg("exchange_rate.date3",date("Y-m-d H:i:s"));
 	    $out["date3"]=date("Y-m-d H:i:s");
 		}
 	//Конец парсинга курсов от Минфин
@@ -336,7 +336,7 @@ public function usual(&$out) {
 */
 public function install($data='') {
  $className = 'ExchangeRates'; //имя класса
- $objectName = array('Rate');//имя обьектов
+ $objectName = array('exchange_rate');//имя обьектов
  $objDescription = array('Курс валют');
  $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  
@@ -365,7 +365,7 @@ public function install($data='') {
  function processSubscription($event_name, $details='') {
         if ($event_name=='HOURLY') {
 			$this->SaveAutoUpdate();
-			//say("Выполняю обновление курсов валют");
+			say("Выполняю обновление курсов валют");
         }
     }
  

@@ -365,7 +365,7 @@ public function install($data='') {
  function processSubscription($event_name, $details='') {
         if ($event_name=='HOURLY') {
 			$this->SaveAutoUpdate();
-			say("Выполняю обновление курсов валют");
+			//say("Выполняю обновление курсов валют");
         }
     }
  

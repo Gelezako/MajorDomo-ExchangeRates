@@ -205,6 +205,12 @@ public function admin(&$out) {
 	$xml = @simplexml_load_file($url);
     if (!$xml) {
      $out["notification"]="Невозможно получить курс валют ПриватБанка";
+	 sg("exchange_rate.eurobuy","");
+	 sg("exchange_rate.eurosale","");
+	 sg("exchange_rate.usdbuy","");
+	 sg("exchange_rate.usdsale","");
+	 sg("exchange_rate.rurbuy","");
+	 sg("exchange_rate.rursale","");
      }
      else{
         global $eurohr;
@@ -264,6 +270,8 @@ public function admin(&$out) {
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
       if (!$file) {
         $out["notification2"]="Невозможно получить курс валют Банка России";
+		sg("exchange_rate.dollarrur","");
+		sg("exchange_rate.eurorur","");
         }
      else{ 
         if(isset($dollarrur)){
@@ -292,6 +300,9 @@ public function admin(&$out) {
 	$file_nbu = json_decode($file_nbu);
 		  if (!$file_nbu) {
 			$out["notification3"]="Невозможно получить курс валют НБУ";
+			sg("exchange_rate.rurnbu","");
+			sg("exchange_rate.usdnbu","");
+			sg("exchange_rate.euronbu","");
 			}
 		 else{ 
 			if(isset($usdnbu)){

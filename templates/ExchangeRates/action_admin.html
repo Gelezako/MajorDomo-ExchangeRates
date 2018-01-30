@@ -12,7 +12,7 @@
 <!-- начало кнопка about-->
 
 <div class="float-right">
-	<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about">О модуле&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
+	<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about"><#LANG_ER_APP_ABOUT#>&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
 	</button>
 </div>
 <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about1" aria-hidden="true">
@@ -20,8 +20,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Курс валют</h4>
+				<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><#LANG_ER_APP_CLOSE#></span></button>
+				<h4 class="modal-title"><#LANG_ER_APP_NAME#></h4>
 			</div>
 			<div class="modal-body">
 				<div class="float-right">
@@ -29,18 +29,18 @@
 					<br><br><p><b>v.0.1</b></p>
 				</div>
                 <p class="float-left">
-					Модуль "Курс валют"<br><br>
-					Обсуждение модуля на <a href="https://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=3680" target="_blank">форуме</a>.<br>
-					Проект на <a href="https://github.com/Gelezako/MajorDomo-ExchangeRates" target="_blank"><i class="fa fa-github" aria-hidden="true"> Github</i></a>.<br>
-					Проект в <a href="https://connect.smartliving.ru/addons/category3/84.html" target="_blank">Connect</a>.<br>
+					<#LANG_ER_APP_MODULE#> "<#LANG_ER_APP_NAME#>"<br><br>
+					<a href="https://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=3680" target="_blank"><#LANG_ER_APP_DISCUS#></a>.<br>
+					<#LANG_ER_APP_PROJ#> <a href="https://github.com/Gelezako/MajorDomo-ExchangeRates" target="_blank"><i class="fa fa-github" aria-hidden="true"> Github</i></a>.<br>
+					<#LANG_ER_APP_PROJ#> <a href="https://connect.smartliving.ru/addons/category3/84.html" target="_blank">Connect</a>.<br>
 				</p>
 				<hr size="1">
 				<p class="float-left">
-				Поддержать разработку и развитие модуля:
+				<#LANG_ER_APP_DONATE#>
 				<ul>
-				    <li>Страничка для доната в: <a href="https://www.liqpay.ua/ru/checkout/380972054741" target="_blank"><i class="fa fa-credit-card-alt" aria-hidden="true"> Liqpay</i></a></li>
-					<li>Страничка для доната в: <a href="https://www.patreon.com/user?u=8755313" target="_blank">Patreon</a></li>
-					<li>Внутренний счет в <a href="https://connect.smartliving.ru/tasks/65.html" target="_blank">Connect</a></li>
+				    <li><#LANG_ER_APP_DONATE2#> <a href="https://www.liqpay.ua/ru/checkout/380972054741" target="_blank"><i class="fa fa-credit-card-alt" aria-hidden="true"> Liqpay</i></a></li>
+					<li><#LANG_ER_APP_DONATE2#> <a href="https://www.patreon.com/user?u=8755313" target="_blank">Patreon</a></li>
+					<li><#LANG_ER_APP_DONATE3#> <a href="https://connect.smartliving.ru/tasks/65.html" target="_blank">Connect</a></li>
 					<li>WMZ: Z361986620412</li>
 					<li>WMR: R202811747775</li>
 					<li>WMU: U201862406146</li>
@@ -49,15 +49,15 @@
                 </p>
 			</div>
 			<div class="modal-footer">
-				<div class="pull-left">Автор: <a href="https://telegram.me/gelezako" target="_blank"><i class="fa fa-telegram" aria-hidden="true"> Gelezako</i></a></div>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+				<div class="pull-left"><#LANG_ER_APP_Author#>: <a href="https://telegram.me/gelezako" target="_blank"><i class="fa fa-telegram" aria-hidden="true"> Gelezako</i></a></div>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><#LANG_ER_APP_CLOSE#></button>
 			</div>
 		</div>
 	</div>
 </div>
 
 <div>
-	<img src="https://connect.smartliving.ru/cms/addons/84_icon.jpg"  width="120"><h3>Курс валют</h3>
+	<img src="https://connect.smartliving.ru/cms/addons/84_icon.jpg"  width="120"><h3><#LANG_ER_APP_NAME#></h3>
 </div>
 
 <!-- конец кнопка about-->
@@ -73,69 +73,69 @@
 <input type="hidden" name="view_mode" value="update_settings">
 <input type="hidden" name="mode" value="update"><br>
 
-<h3>Выберите тип валюты,<br> который хотите получить</h3><br><br>
+<h3><#LANG_ER_APP_TITLE#></h3><br><br>
 <div class="form-group">
-	<h3>Коммерческий курс ПриватБанка</h3>
-	<label class="col-md-3">Пара: Евро\Гривна</label>
+	<h3><#LANG_ER_APP_BANK_UA#></h3>
+	<label class="col-md-3"><#LANG_ER_APP_EU_HR#></label>
 	<label class="col-md-3">&#8372; <#eurobuy#>\<#eurosale#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="eurohr" checked>
 	</div><br><br><br>
 	
-	<label class="col-md-3">Пара: Доллар\Гривна</label>
+	<label class="col-md-3"><#LANG_ER_APP_DO_HR#></label>
 	<label class="col-md-3">&#8372; <#usdbuy#>\<#usdsale#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="usdhr" checked></div><br><br><br>
 	
-	<label class="col-md-3">Пара: Рубль\Гривна</label>
+	<label class="col-md-3"><#LANG_ER_APP_RU_HR#></label>
 	<label class="col-md-3">&#8372; <#rurbuy#>\<#rursale#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="rurhr" checked></div><br>
-	<font size="2">Обновлено: <#date1#></font><br><br>
-	<font color="red" size="4"><#notification#></font>
+	<font size="2"><#LANG_LATEST_UPDATES#>: <#date1#></font><br><br>
+	<font color="red" size="4"><#ER_APP_NOTIF#></font>
 
-    <h3>Банк России</h3>
-	<label class="col-md-3">Пара: Доллар\Рубль</label>
+    <h3><#LANG_ER_APP_BANK_RU#></h3>
+	<label class="col-md-3"><#LANG_ER_APP_DO_RU#></label>
 	<label class="col-md-3">&#8381; <#dollarrur#></i></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="dollarrur" checked></div><br><br><br>
 	
-	<label class="col-md-3">Пара: Евро\Рубль</label>
+	<label class="col-md-3"><#LANG_ER_APP_EU_RU#></label>
 	<label class="col-md-3">&#8381; <#eurorur#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="eurorur" checked></div><br>
-	<font size="2">Обновлено: <#date2#></font><br><br>
-	<font color="red" size="4"><#notification2#></font>
+	<font size="2"><#LANG_LATEST_UPDATES#>: <#date2#></font><br><br>
+	<font color="red" size="4"><#ER_APP_NOTIF2#></font>
 	
-	<h3>Курс НБУ</h3>
-	<label class="col-md-3">Пара: Евро\Гривна</label>
+	<h3><#LANG_ER_APP_BANK_NBU#></h3>
+	<label class="col-md-3"><#LANG_ER_APP_EU_HR#></label>
 	<label class="col-md-3">&#8372; <#euronbu#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="euronbu" checked>
 	</div><br><br><br>
 	
-	<label class="col-md-3">Пара: Доллар\Гривна</label>
+	<label class="col-md-3"><#LANG_ER_APP_DO_HR#></label>
 	<label class="col-md-3">&#8372; <#usdnbu#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="usdnbu" checked></div><br><br><br>
 	
-	<label class="col-md-3">Пара: Рубль\Гривна</label>
+	<label class="col-md-3"><#LANG_ER_APP_RU_HR#></label>
 	<label class="col-md-3">&#8372; <#rurnbu#></label>
 	<div class="col-md-3">
 	<input type="checkbox" name="rurnbu" checked></div><br>
-	<font size="2">Обновлено: <#date3#></font>
+	<font size="2"><#LANG_LATEST_UPDATES#>: <#date3#></font>
 	<br>
 	<br><br>
-	<font color="red" size="4"><#notification3#></font><br><br>
+	<font color="red" size="4"><#ER_APP_NOTIF3#></font><br><br>
 	
 	
     <button type="submit" name="subm" value="Submit" class="btn btn-primary"><i class="fa fa-repeat" aria-hidden="true"> <#LANG_UPDATE#></i></button>
-	<input type="button" class="btn btn-primary" onclick="location.href='https://www.youtube.com/watch?v=wZSfGWjE6lc&index=4&list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E';" value="Озвучить"/>
+	<input type="button" class="btn btn-primary" onclick="location.href='https://www.youtube.com/watch?v=wZSfGWjE6lc&index=4&list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E';" value="<#LANG_ER_APP_SOUND#>"/>
 	</div><br>
 
 	</div>
 	</fieldset>
 </form><br>
-<a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=3680" target="_blank">Обсуждение модуля на форуме</a>.<br>
-Курс НБУ предоставлен порталом <a href="https://minfin.com.ua" target="_blank">Минфин</a>.<br>
+<a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=3680" target="_blank"><#LANG_ER_APP_DISCUS#></a>.<br>
+<#LANG_ER_APP_INFO#> <a href="https://minfin.com.ua" target="_blank"><#LANG_ER_APP_MINFIN#></a>.<br>
 </div>

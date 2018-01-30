@@ -204,7 +204,7 @@ public function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 	$xml = @simplexml_load_file($url);
     if (!$xml) {
-     $out["notification"]="Невозможно получить курс валют ПриватБанка";
+     $out["notification"]="<#LANG_ER_APP_NOTIF#>";
 	 sg("exchange_rate.eurobuy","");
 	 sg("exchange_rate.eurosale","");
 	 sg("exchange_rate.usdbuy","");
@@ -269,7 +269,7 @@ public function admin(&$out) {
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
       if (!$file) {
-        $out["notification2"]="Невозможно получить курс валют Банка России";
+        $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
 		sg("exchange_rate.dollarrur","");
 		sg("exchange_rate.eurorur","");
         }
@@ -299,7 +299,7 @@ public function admin(&$out) {
 	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
 	$file_nbu = json_decode($file_nbu);
 		  if (!$file_nbu) {
-			$out["notification3"]="Невозможно получить курс валют НБУ";
+			$out["notification3"]="<#LANG_ER_APP_NOTIF3#>";
 			sg("exchange_rate.rurnbu","");
 			sg("exchange_rate.usdnbu","");
 			sg("exchange_rate.euronbu","");

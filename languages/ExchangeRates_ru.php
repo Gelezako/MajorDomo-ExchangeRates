@@ -37,7 +37,7 @@ $dictionary = array(
 
 'ER_APP_BANK_NBU' => 'Курс НБУ',
 'ER_APP_SOUND' => 'Озвучить',
-'ER_APP_DISCUS' => 'бсуждение модуля на форуме.',
+'ER_APP_DISCUS' => 'Обсуждение модуля на форуме.',
 'ER_APP_INFO' => 'Курс НБУ предоставлен порталом',
 'ER_APP_MINFIN' => 'Минфин.',
 

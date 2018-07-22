@@ -18,7 +18,7 @@ class ExchangeRates extends module {
 */
 public function ExchangeRates() {
   $this->name="ExchangeRates";
-  $this->title="";
+  $this->title="Курс валют";
   $this->module_category="<#LANG_SECTION_APPLICATIONS#>";
   $this->checkInstalled();
 }
@@ -348,7 +348,7 @@ public function usual(&$out) {
 public function install($data='') {
  $className = 'ExchangeRates'; //имя класса
  $objectName = array('exchange_rate');//имя обьектов
- $objDescription = array('Курс валют');
+ //$objDescription = array('Курс валют');
  $rec = SQLSelectOne("SELECT ID FROM classes WHERE TITLE LIKE '" . DBSafe($className) . "'");
  
     if (!$rec['ID']) {

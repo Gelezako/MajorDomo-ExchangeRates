@@ -195,7 +195,24 @@ public function SaveAutoUpdate(){
 				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
 				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
 		  }
-	//Конец парсинга курсов от Минфин		
+		  
+	// Начало парсинга курсов Нац Банка Казахстана
+	$url = "http://www.nationalbank.kz/rss/rates_all.xml";
+	$dataObj = simplexml_load_file($url);
+	foreach ($dataObj->channel->item as $item) {
+		if ($item->title =='USD') {
+			 sg('exchange_rate.date4',$item->pubDate);
+			 sg('exchange_rate.kztusd',$item->description);
+		} 
+		if ($item->title =='EUR') {
+			 sg('exchange_rate.date4',$item->pubDate);
+			 sg('exchange_rate.kzteur',$item->description);
+		} 
+   }
+	// Конец парсинга курсов Нац Банка Казахстана
+	
+
+	
 }
 
 public function admin(&$out) {
@@ -323,6 +340,32 @@ public function admin(&$out) {
 		}
 	//Конец парсинга курсов от Минфин
 	
+	// Начало парсинга курсов Нац Банка Казахстана
+	global $kztusd,$kzteur;
+	$url_kz = "http://www.nationalbank.kz/rss/rates_all.xml";
+	$dataObj = simplexml_load_file($url_kz);
+		if (!$dataObj) {
+			$out["notification4"]="<#LANG_ER_APP_NOTIF4#>";
+			sg("exchange_rate.kztusd","");
+			sg("exchange_rate.kzteur","");
+			}
+		else{ 
+			foreach ($dataObj->channel->item as $item) {
+				if ($item->title =='USD') {
+					 sg('exchange_rate.date4',$item->pubDate);
+					 sg('exchange_rate.kztusd',$item->description);
+					 $out["kztusd"]=$item->description;
+				} 
+				if ($item->title =='EUR') {
+					 sg('exchange_rate.date4',$item->pubDate);
+					 sg('exchange_rate.kzteur',$item->description);
+					 $out["kzteur"]=$item->description;
+				}
+			}
+		}
+		sg("exchange_rate.date4",date("Y-m-d H:i:s"));
+	    $out["date4"]=date("Y-m-d H:i:s");		
+	// Конец парсинга курсов Нац Банка Казахстана
 }
 
 
@@ -354,7 +397,7 @@ public function install($data='') {
     if (!$rec['ID']) {
         $rec = array();
         $rec['TITLE'] = $className;
-        $rec['DESCRIPTION'] = $objDescription;
+        //$rec['DESCRIPTION'] = $objDescription;
         $rec['ID'] = SQLInsert('classes', $rec);
     }
     for ($i = 0; $i < count($objectName); $i++) {
@@ -363,7 +406,7 @@ public function install($data='') {
             $obj_rec = array();
             $obj_rec['CLASS_ID'] = $rec['ID'];
             $obj_rec['TITLE'] = $objectName[$i];
-            $obj_rec['DESCRIPTION'] = $objDescription[$i];
+            //$obj_rec['DESCRIPTION'] = $objDescription[$i];
             $obj_rec['ID'] = SQLInsert('objects', $obj_rec);
         }
     }

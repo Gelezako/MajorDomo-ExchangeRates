@@ -252,7 +252,6 @@ public function SaveAutoUpdate(){
 }
 
 public function admin(&$out) {
-	global $date1,$date2,$date; //время последнего обновления курсов
     libxml_use_internal_errors(true);
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 	$xml = @simplexml_load_file($url);

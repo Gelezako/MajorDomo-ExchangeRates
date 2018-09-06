@@ -451,7 +451,7 @@ public function install($data='') {
     if (!$rec['ID']) {
         $rec = array();
         $rec['TITLE'] = $className;
-        //$rec['DESCRIPTION'] = $objDescription;
+        $rec['DESCRIPTION'] = "Курс Валют";
         $rec['ID'] = SQLInsert('classes', $rec);
     }
     for ($i = 0; $i < count($objectName); $i++) {

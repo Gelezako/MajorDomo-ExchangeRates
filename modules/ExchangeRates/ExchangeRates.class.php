@@ -128,7 +128,27 @@ public function SaveAutoUpdate(){
 	libxml_use_internal_errors(true);
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 	$xml = @simplexml_load_file($url);
-	if ($xml) {
+    if (!$xml) {
+			 $out["notification"]="<#LANG_ER_APP_NOTIF#>";
+			 sg("exchange_rate.eurobuy","");
+			 sg("exchange_rate.eurosale","");
+			 sg("exchange_rate.usdbuy","");
+			 sg("exchange_rate.usdsale","");
+			 sg("exchange_rate.rurbuy","");
+			 sg("exchange_rate.rursale","");
+			 Debmes("Не удалось обновить курс валют");
+     }
+	 else if (false === $xml) {
+		     $out["notification"]="<#LANG_ER_APP_NOTIF#>";
+			 sg("exchange_rate.eurobuy","");
+			 sg("exchange_rate.eurosale","");
+			 sg("exchange_rate.usdbuy","");
+			 sg("exchange_rate.usdsale","");
+			 sg("exchange_rate.rurbuy","");
+			 sg("exchange_rate.rursale","");
+			 Debmes("Не удалось обновить курс валют");
+	}
+	else if($xml) {
         $i=0;
         //получаем курс евро
         foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
@@ -170,7 +190,14 @@ public function SaveAutoUpdate(){
 	 
 	//Начало парсинга ЦБР
 	$file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-		  if ($file) {
+		if (false === $file) {
+		//throw new Exception("Cannot load xml source.\n");
+		Debmes("Не удалось обновить курс валют");
+		$out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
+		sg("exchange_rate.dollarrur","");
+		sg("exchange_rate.eurorur","");
+	}
+	else if($file) {
 				$xml = $file->xpath("//Valute[@ID='R01235']");
 				$valute = strval($xml[0]->Value);
 				$dollar = str_replace(",",".",$valute);
@@ -195,20 +222,29 @@ public function SaveAutoUpdate(){
 				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
 				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
 		  }
+		  else{Debmes("Не удалось обновить курс валют");}
 		  
 	// Начало парсинга курсов Нац Банка Казахстана
 	$url = "http://www.nationalbank.kz/rss/rates_all.xml";
 	$dataObj = simplexml_load_file($url);
-	foreach ($dataObj->channel->item as $item) {
-		if ($item->title =='USD') {
-			 sg('exchange_rate.date4',$item->pubDate);
-			 sg('exchange_rate.kztusd',$item->description);
-		} 
-		if ($item->title =='EUR') {
-			 sg('exchange_rate.date4',$item->pubDate);
-			 sg('exchange_rate.kzteur',$item->description);
-		} 
-   }
+	    if (false === $dataObj) {
+			$out["notification4"]="<#LANG_ER_APP_NOTIF2#>";
+			sg("exchange_rate.kztusd","");
+			sg("exchange_rate.kzteur","");
+			Debmes("Не удалось обновить курс валют");
+        }
+		else{
+			foreach ($dataObj->channel->item as $item) {
+				if ($item->title =='USD') {
+					 sg('exchange_rate.date4',$item->pubDate);
+					 sg('exchange_rate.kztusd',$item->description);
+				} 
+				if ($item->title =='EUR') {
+					 sg('exchange_rate.date4',$item->pubDate);
+					 sg('exchange_rate.kzteur',$item->description);
+				} 
+			}
+		}
 	// Конец парсинга курсов Нац Банка Казахстана
 	
 
@@ -221,14 +257,25 @@ public function admin(&$out) {
 	$url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11'; 
 	$xml = @simplexml_load_file($url);
     if (!$xml) {
-     $out["notification"]="<#LANG_ER_APP_NOTIF#>";
-	 sg("exchange_rate.eurobuy","");
-	 sg("exchange_rate.eurosale","");
-	 sg("exchange_rate.usdbuy","");
-	 sg("exchange_rate.usdsale","");
-	 sg("exchange_rate.rurbuy","");
-	 sg("exchange_rate.rursale","");
+			 $out["notification"]="<#LANG_ER_APP_NOTIF#>";
+			 sg("exchange_rate.eurobuy","");
+			 sg("exchange_rate.eurosale","");
+			 sg("exchange_rate.usdbuy","");
+			 sg("exchange_rate.usdsale","");
+			 sg("exchange_rate.rurbuy","");
+			 sg("exchange_rate.rursale","");
+			 Debmes("Не удалось обновить курс валют");
      }
+	 else if (false === $xml) {
+		     $out["notification"]="<#LANG_ER_APP_NOTIF#>";
+			 sg("exchange_rate.eurobuy","");
+			 sg("exchange_rate.eurosale","");
+			 sg("exchange_rate.usdbuy","");
+			 sg("exchange_rate.usdsale","");
+			 sg("exchange_rate.rurbuy","");
+			 sg("exchange_rate.rursale","");
+			 Debmes("Не удалось обновить курс валют");
+	}
      else{
         global $eurohr;
         if(isset($eurohr)){ 
@@ -285,11 +332,18 @@ public function admin(&$out) {
 // Начало парсинга хмл банка России
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-      if (!$file) {
+    if (!$file) {
         $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
 		sg("exchange_rate.dollarrur","");
 		sg("exchange_rate.eurorur","");
+		Debmes("Не удалось обновить курс валют");
         }
+    else if (false === $file) {
+        $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
+		sg("exchange_rate.dollarrur","");
+		sg("exchange_rate.eurorur","");
+		Debmes("Не удалось обновить курс валют");
+        }		
      else{ 
         if(isset($dollarrur)){
             $xml = $file->xpath("//Valute[@ID='R01235']");
@@ -308,7 +362,8 @@ public function admin(&$out) {
 	sg("exchange_rate.date2",date("Y-m-d H:i:s"));
 	$out["date2"]=date("Y-m-d H:i:s");
     }
-    
+    libxml_clear_errors();
+	libxml_use_internal_errors($use_errors);
 	
 	// Начало парсинга курсов от Минфин
 	global $euronbu,$usdnbu,$rurnbu;
@@ -344,7 +399,7 @@ public function admin(&$out) {
 	global $kztusd,$kzteur;
 	$url_kz = "http://www.nationalbank.kz/rss/rates_all.xml";
 	$dataObj = simplexml_load_file($url_kz);
-		if (!$dataObj) {
+		if (!$dataObj  or false === $dataObj) {
 			$out["notification4"]="<#LANG_ER_APP_NOTIF4#>";
 			sg("exchange_rate.kztusd","");
 			sg("exchange_rate.kzteur","");

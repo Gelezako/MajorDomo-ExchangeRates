@@ -154,9 +154,17 @@ public function SaveAutoUpdate(){
         foreach($xml->row[1]->exchangerate->attributes() as $key => $exchangerate){
           if($i==2){
             sg("exchange_rate.eurobuy",round((float)$exchangerate,1));
+			$out["eurobuy"]=round((float)$exchangerate,1);
+					  
+		    sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+		    $out["date1"]=date("Y-m-d H:i:s");
           }
           else if($i==3){
-          sg("exchange_rate.eurosale",round((float)$exchangerate,1));
+			sg("exchange_rate.eurosale",round((float)$exchangerate,1));
+			$out["eurosale"]=round((float)$exchangerate,1);
+		  		  
+			sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			$out["date1"]=date("Y-m-d H:i:s");
           }
           ++$i;
         }
@@ -165,10 +173,18 @@ public function SaveAutoUpdate(){
 		$j=0;
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
-          sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
+			sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
+			$out["usdbuy"]=round((float)$exchangerate,1);
+		  		  
+			sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			$out["date1"]=date("Y-m-d H:i:s");
           }
           else if($j==3){
-          sg("exchange_rate.usdsale",round((float)$exchangerate,1));
+			  sg("exchange_rate.usdsale",round((float)$exchangerate,1));
+			  $out["usdsale"]=round((float)$exchangerate,1);
+						  
+			  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			  $out["date1"]=date("Y-m-d H:i:s");
           }
           ++$j;
         }
@@ -177,22 +193,28 @@ public function SaveAutoUpdate(){
 		$k=0;
         foreach($xml->row[2]->exchangerate->attributes() as $key => $exchangerate){
           if($k==2){
-          sg("exchange_rate.rurbuy",round((float)$exchangerate,2));
+			sg("exchange_rate.rurbuy",round((float)$exchangerate,2));
+			$out["rurbuy"]=round((float)$exchangerate,2);
+		  
+			sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			$out["date1"]=date("Y-m-d H:i:s");		  
           }
           else if($k==3){
-          sg("exchange_rate.rursale",round((float)$exchangerate,2));
+			sg("exchange_rate.rursale",round((float)$exchangerate,2));
+			$out["rursale"]=round((float)$exchangerate,2);
+			
+			sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			$out["date1"]=date("Y-m-d H:i:s");
           }
           ++$k;
         }
-	  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
      }
 	 //Конец парсинга Приватбанк АПИ
 	 
 	//Начало парсинга ЦБР
 	$file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
 		if (false === $file) {
-		//throw new Exception("Cannot load xml source.\n");
-		Debmes("Не удалось обновить курс валют");
+		Debmes("Не удалось обновить курс валют Приватбанка");
 		$out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
 		sg("exchange_rate.dollarrur","");
 		sg("exchange_rate.eurorur","");
@@ -202,12 +224,16 @@ public function SaveAutoUpdate(){
 				$valute = strval($xml[0]->Value);
 				$dollar = str_replace(",",".",$valute);
 				sg("exchange_rate.dollarrur",round((float)$dollar,2));
+				$out["dollarrur"]= round((float)$dollar,2);
 
 				$xml = $file->xpath("//Valute[@ID='R01239']");
 				$valute = strval($xml[0]->Value);
 				$euro = str_replace(",",".",$valute);
 				sg("exchange_rate.eurorur",round((float)$euro,2));
+				$out["dollarrur"]= round((float)$euro,2);
+				
 				sg("exchange_rate.date2",date("Y-m-d H:i:s"));
+				$out["date2"]= date("Y-m-d H:i:s");
 			}
     //Конец парсинга ЦБР
 			
@@ -217,18 +243,27 @@ public function SaveAutoUpdate(){
 	$file_nbu = json_decode($file_nbu);
 		  if ($file_nbu){ 
 				$d=$file_nbu->usd->ask;
-				sg("exchange_rate.usdnbu",round((float)$d,2));	
+				sg("exchange_rate.usdnbu",round((float)$d,2));
+				$out["usdnbu"]=round((float)$d,2);
+				
 				sg("exchange_rate.euronbu",round((float)$file_nbu->eur->ask,2));
+				$out["euronbu"]=round((float)$file_nbu->eur->ask,2);
+				
 				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
+				$out["rurnbu"]=round((float)$file_nbu->rub->ask,2);
+				
 				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
+				$out["date3"]=date("Y-m-d H:i:s");
 		  }
 		  else{Debmes("Не удалось обновить курс валют");}
+	//Конец парсинга курсов от Минфин	  
+		  
 		  
 	// Начало парсинга курсов Нац Банка Казахстана
 	$url = "http://www.nationalbank.kz/rss/rates_all.xml";
 	$dataObj = simplexml_load_file($url);
 	    if (false === $dataObj) {
-			$out["notification4"]="<#LANG_ER_APP_NOTIF2#>";
+			$out["notification4"]="<#LANG_ER_APP_NOTIF4#>";
 			sg("exchange_rate.kztusd","");
 			sg("exchange_rate.kzteur","");
 			Debmes("Не удалось обновить курс валют");
@@ -238,14 +273,46 @@ public function SaveAutoUpdate(){
 				if ($item->title =='USD') {
 					 sg('exchange_rate.date4',$item->pubDate);
 					 sg('exchange_rate.kztusd',$item->description);
+					 					 					 
+					 sg("exchange_rate.date4",date("Y-m-d H:i:s"));
+					 $out["date4"]=date("Y-m-d H:i:s");
 				} 
 				if ($item->title =='EUR') {
 					 sg('exchange_rate.date4',$item->pubDate);
 					 sg('exchange_rate.kzteur',$item->description);
+					 					 					 
+					 sg("exchange_rate.date4",date("Y-m-d H:i:s"));
+					 $out["date4"]=date("Y-m-d H:i:s");
 				} 
 			}
 		}
 	// Конец парсинга курсов Нац Банка Казахстана
+	
+	
+	
+	// Начало парсинга курсов Нац Банка Республики Беларусь
+	$fileBY = simplexml_load_file("http://www.nbrb.by/Services/XmlExRates.aspx");
+		if (false === $fileBY) {
+		Debmes("Не удалось обновить курс валют Нац Банка Республики Беларусь");
+		$out["notification5"]="<#LANG_ER_APP_NOTIF5#>";
+		sg("exchange_rate.dollarbyn","");
+		sg("exchange_rate.eurobyn","");
+	}
+	else if($fileBY) {
+				$xml = $fileBY->xpath("//Currency[@Id='145']");
+				$valute = strval($xml[0]->Rate);
+				sg("exchange_rate.dollarbyn",round((float)$valute,2));
+				$out["dollarbyn"]= round((float)$valute,2);
+
+				$xml = $fileBY->xpath("//Currency[@Id='292']");
+				$valute = strval($xml[0]->Rate);
+				sg("exchange_rate.eurobyn",round((float)$valute,2));
+				$out["eurobyn"]= round((float)$valute,2);
+				
+				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
+				$out["date5"] = date("Y-m-d H:i:s");
+			}
+	// Конец парсинга курсов Нац Банка Республики Беларусь
 	
 
 	
@@ -263,7 +330,7 @@ public function admin(&$out) {
 			 sg("exchange_rate.usdsale","");
 			 sg("exchange_rate.rurbuy","");
 			 sg("exchange_rate.rursale","");
-			 Debmes("Не удалось обновить курс валют");
+			 Debmes("Не удалось обновить курс валют Приватбанка");
      }
 	 else if (false === $xml) {
 		     $out["notification"]="<#LANG_ER_APP_NOTIF#>";
@@ -273,7 +340,7 @@ public function admin(&$out) {
 			 sg("exchange_rate.usdsale","");
 			 sg("exchange_rate.rurbuy","");
 			 sg("exchange_rate.rursale","");
-			 Debmes("Не удалось обновить курс валют");
+			 Debmes("Не удалось обновить курс валют Приватбанка");
 	}
      else{
         global $eurohr;
@@ -284,10 +351,16 @@ public function admin(&$out) {
           if($i==2){
             sg("exchange_rate.eurobuy",round((float)$exchangerate,1));
             $out["eurobuy"]=round((float)$exchangerate,1);
+					  
+		    sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+		    $out["date1"]=date("Y-m-d H:i:s");
           }
           else if($i==3){
           sg("exchange_rate.eurosale",round((float)$exchangerate,1));
           $out["eurosale"]=round((float)$exchangerate,1);
+		  		  
+		  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+		  $out["date1"]=date("Y-m-d H:i:s");
           }
           ++$i;
         }}
@@ -299,12 +372,18 @@ public function admin(&$out) {
         $j=0;
         foreach($xml->row[0]->exchangerate->attributes() as $key => $exchangerate){
           if($j==2){
-          sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
-          $out["usdbuy"]=round((float)$exchangerate,1);
+			  sg("exchange_rate.usdbuy",round((float)$exchangerate,1));
+			  $out["usdbuy"]=round((float)$exchangerate,1);
+					  
+			  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			  $out["date1"]=date("Y-m-d H:i:s");
           }
           else if($j==3){
-          sg("exchange_rate.usdsale",round((float)$exchangerate,1));
-          $out["usdsale"]=round((float)$exchangerate,1);
+			  sg("exchange_rate.usdsale",round((float)$exchangerate,1));
+			  $out["usdsale"]=round((float)$exchangerate,1);
+					  
+			  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+			  $out["date1"]=date("Y-m-d H:i:s");
           }
           ++$j;
         }}
@@ -317,18 +396,23 @@ public function admin(&$out) {
           if($k==2){
           sg("exchange_rate.rurbuy",round((float)$exchangerate,2));
           $out["rurbuy"]=round((float)$exchangerate,2);
+		  
+		  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+		  $out["date1"]=date("Y-m-d H:i:s");
           }
           else if($k==3){
           sg("exchange_rate.rursale",round((float)$exchangerate,2));
           $out["rursale"]=round((float)$exchangerate,2);
+		  		  
+		  sg("exchange_rate.date1",date("Y-m-d H:i:s"));
+		  $out["date1"]=date("Y-m-d H:i:s");
           }
           ++$k;
         }}   
-    sg("exchange_rate.date1",date("Y-m-d H:i:s"));
-	$out["date1"]=date("Y-m-d H:i:s");
     } //Конец парсинга хмл от ПриватБанка
 
-// Начало парсинга хмл банка России
+
+// Начало парсинга ЦБР
   global $dollarrur,$eurorur;
   $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
     if (!$file) {
@@ -341,7 +425,7 @@ public function admin(&$out) {
         $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
 		sg("exchange_rate.dollarrur","");
 		sg("exchange_rate.eurorur","");
-		Debmes("Не удалось обновить курс валют");
+		Debmes("Не удалось обновить курс валют банка России");
         }		
      else{ 
         if(isset($dollarrur)){
@@ -350,6 +434,9 @@ public function admin(&$out) {
             $dollar = str_replace(",",".",$valute);
             sg("exchange_rate.dollarrur",round((float)$dollar,2));
             $out["dollarrur"]=round((float)$dollar,2);
+			
+			sg("exchange_rate.date2",date("Y-m-d H:i:s"));
+			$out["date2"]=date("Y-m-d H:i:s");
         }
         if(isset($eurorur)){
             $xml = $file->xpath("//Valute[@ID='R01239']");
@@ -357,14 +444,18 @@ public function admin(&$out) {
             $euro = str_replace(",",".",$valute);
             sg("exchange_rate.eurorur",round((float)$euro,2));
             $out["eurorur"]=round((float)$euro,2);
+			
+			sg("exchange_rate.date2",date("Y-m-d H:i:s"));
+			$out["date2"]=date("Y-m-d H:i:s");
         }
-	sg("exchange_rate.date2",date("Y-m-d H:i:s"));
-	$out["date2"]=date("Y-m-d H:i:s");
     }
+	
+//Конец парсинга ЦБР
+	
     libxml_clear_errors();
 	libxml_use_internal_errors($use_errors);
 	
-	// Начало парсинга курсов от Минфин
+// Начало парсинга курсов от Минфин
 	global $euronbu,$usdnbu,$rurnbu;
     ini_set("user_agent","MajorDomo-ExchangeRates/0.1");
 	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
@@ -380,21 +471,28 @@ public function admin(&$out) {
 				$d=$file_nbu->usd->ask;
 				sg("exchange_rate.usdnbu",round((float)$d,2));
 				$out["usdnbu"]=round((float)$d,2);
+				
+				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
+				$out["date3"]=date("Y-m-d H:i:s");
 			}
 			if(isset($euronbu)){	
 				sg("exchange_rate.euronbu",round((float)$file_nbu->eur->ask,2));
 				$out["euronbu"]=round((float)$file_nbu->eur->ask,2);
+								
+				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
+				$out["date3"]=date("Y-m-d H:i:s");
 			}
 			if(isset($rurnbu)){
 				sg("exchange_rate.rurnbu",round((float)$file_nbu->rub->ask,2));
 				$out["rurnbu"]=round((float)$file_nbu->rub->ask,2);
+								
+				sg("exchange_rate.date3",date("Y-m-d H:i:s"));
+				$out["date3"]=date("Y-m-d H:i:s");
 			}
-		sg("exchange_rate.date3",date("Y-m-d H:i:s"));
-	    $out["date3"]=date("Y-m-d H:i:s");
 		}
-	//Конец парсинга курсов от Минфин
+//Конец парсинга курсов от Минфин
 	
-	// Начало парсинга курсов Нац Банка Казахстана
+// Начало парсинга курсов Нац Банка Казахстана
 	global $kztusd,$kzteur;
 	$url_kz = "http://www.nationalbank.kz/rss/rates_all.xml";
 	$dataObj = simplexml_load_file($url_kz);
@@ -409,17 +507,48 @@ public function admin(&$out) {
 					 sg('exchange_rate.date4',$item->pubDate);
 					 sg('exchange_rate.kztusd',$item->description);
 					 $out["kztusd"]=$item->description;
+					 
+					 sg("exchange_rate.date4",date("Y-m-d H:i:s"));
+					 $out["date4"]=date("Y-m-d H:i:s");
 				} 
 				if ($item->title =='EUR') {
 					 sg('exchange_rate.date4',$item->pubDate);
 					 sg('exchange_rate.kzteur',$item->description);
 					 $out["kzteur"]=$item->description;
+					 					 
+					 sg("exchange_rate.date4",date("Y-m-d H:i:s"));
+					 $out["date4"]=date("Y-m-d H:i:s");
 				}
 			}
-		}
-		sg("exchange_rate.date4",date("Y-m-d H:i:s"));
-	    $out["date4"]=date("Y-m-d H:i:s");		
-	// Конец парсинга курсов Нац Банка Казахстана
+		}		
+// Конец парсинга курсов Нац Банка Казахстана
+	
+	
+// Начало парсинга курсов Нац Банка Республики Беларусь
+	global $dollarbyn, $eurobyn;
+	$fileBY = simplexml_load_file("http://www.nbrb.by/Services/XmlExRates.aspx");
+		if (false === $fileBY) {
+		Debmes("Не удалось обновить курс валют Нац Банка Республики Беларусь");
+		$out["notification5"]="<#LANG_ER_APP_NOTIF5#>";
+		sg("exchange_rate.dollarbyn","");
+		sg("exchange_rate.eurobyn","");
+	}
+	else if($fileBY) {
+				$xml = $fileBY->xpath("//Currency[@Id='145']");
+				$valute = strval($xml[0]->Rate);
+				sg("exchange_rate.dollarbyn",round((float)$valute,2));
+				$out["dollarbyn"]= round((float)$valute,2);
+
+				$xml = $fileBY->xpath("//Currency[@Id='292']");
+				$valute = strval($xml[0]->Rate);
+				sg("exchange_rate.eurobyn",round((float)$valute,2));
+				$out["eurobyn"]= round((float)$valute,2);
+				
+				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
+				$out["date5"] = date("Y-m-d H:i:s");
+			}
+// Конец парсинга курсов Нац Банка Республики Беларусь
+	
 }
 
 

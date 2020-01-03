@@ -70,6 +70,7 @@
 <fieldset>
 <div class="form-actions">
 <button type="submit" name="subm" value="Submit" class="btn btn-primary"><i class="fa fa-repeat" aria-hidden="true"> <#LANG_UPDATE#></i></button>
+<button class="btn btn-primary" data-href="https://www.youtube.com/watch?v=wZSfGWjE6lc&index=4&list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E" onclick="window.open(this.getAttribute('data-href')); return false;"><#LANG_ER_APP_SOUND#></button>
 <input type="hidden" name="view_mode" value="update_settings">
 <input type="hidden" name="mode" value="update"><br>
 
@@ -144,8 +145,22 @@
 	<font color="red" size="4"><#ER_APP_NOTIF4#></font>
 	
 	
+	<h3><#LANG_ER_APP_BANK_BY#></h3>
+	<label class="col-md-3"><#LANG_ER_APP_DO_BY#></label>
+	<label class="col-md-3"><#dollarbyn#></i></label>
+	<div class="col-md-3">
+	<input type="checkbox" name="dollarbyn" checked></div><br><br><br>
+	
+	<label class="col-md-3"><#LANG_ER_APP_EU_BY#></label>
+	<label class="col-md-3"><#eurobyn#></label>
+	<div class="col-md-3">
+	<input type="checkbox" name="eurobyn" checked></div><br><br>
+	<font size="2"><#LANG_LATEST_UPDATES#>: <#date5#></font><br><br>
+	<font color="red" size="4"><#ER_APP_NOTIF5#></font>
+	
+	
     <button type="submit" name="subm" value="Submit" class="btn btn-primary"><i class="fa fa-repeat" aria-hidden="true"> <#LANG_UPDATE#></i></button>
-	<input type="button" class="btn btn-primary" onclick="location.href='https://www.youtube.com/watch?v=wZSfGWjE6lc&index=4&list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E';" value="<#LANG_ER_APP_SOUND#>"/>
+	<button class="btn btn-primary" data-href="https://www.youtube.com/watch?v=wZSfGWjE6lc&index=4&list=PLYOYjvcehgZKWUxcNR25o37EdBGtX084E" onclick="window.open(this.getAttribute('data-href')); return false;"><#LANG_ER_APP_SOUND#></button>
 	</div><br>
 
 	</div>

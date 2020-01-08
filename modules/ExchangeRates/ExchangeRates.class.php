@@ -301,13 +301,13 @@ public function SaveAutoUpdate(){
 	else if($fileBY) {
 				$xml = $fileBY->xpath("//Currency[@Id='145']");
 				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.dollarbyn",round((float)$valute,2));
-				$out["dollarbyn"]= round((float)$valute,2);
+				sg("exchange_rate.dollarbyn",$valute);
+				$out["dollarbyn"]= $valute;
 
 				$xml = $fileBY->xpath("//Currency[@Id='292']");
 				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.eurobyn",round((float)$valute,2));
-				$out["eurobyn"]= round((float)$valute,2);
+				sg("exchange_rate.eurobyn",$valute);
+				$out["eurobyn"]= $valute;
 				
 				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
 				$out["date5"] = date("Y-m-d H:i:s");
@@ -536,13 +536,13 @@ public function admin(&$out) {
 	else if($fileBY) {
 				$xml = $fileBY->xpath("//Currency[@Id='145']");
 				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.dollarbyn",round((float)$valute,2));
-				$out["dollarbyn"]= round((float)$valute,2);
+				sg("exchange_rate.dollarbyn",$valute);
+				$out["dollarbyn"]= $valute;
 
 				$xml = $fileBY->xpath("//Currency[@Id='292']");
 				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.eurobyn",round((float)$valute,2));
-				$out["eurobyn"]= round((float)$valute,2);
+				sg("exchange_rate.eurobyn",$valute);
+				$out["eurobyn"]= $valute;
 				
 				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
 				$out["date5"] = date("Y-m-d H:i:s");

@@ -238,6 +238,7 @@ public function SaveAutoUpdate(){
     //Конец парсинга ЦБР
 			
 	// Начало парсинга курсов от Минфин
+	/*
     ini_set("user_agent","MajorDomo-ExchangeRates/0.1");
 	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
 	$file_nbu = json_decode($file_nbu);
@@ -256,6 +257,7 @@ public function SaveAutoUpdate(){
 				$out["date3"]=date("Y-m-d H:i:s");
 		  }
 		  else{Debmes("Не удалось обновить курс валют");}
+		  */
 	//Конец парсинга курсов от Минфин	  
 		  
 		  
@@ -456,6 +458,7 @@ public function admin(&$out) {
 	libxml_use_internal_errors($use_errors);
 	
 // Начало парсинга курсов от Минфин
+/*
 	global $euronbu,$usdnbu,$rurnbu;
     ini_set("user_agent","MajorDomo-ExchangeRates/0.1");
 	$file_nbu = file_get_contents('http://api.minfin.com.ua/nbu/434f685ddcfc82024569b9516a87838053f383a0/',true);
@@ -490,6 +493,7 @@ public function admin(&$out) {
 				$out["date3"]=date("Y-m-d H:i:s");
 			}
 		}
+*/
 //Конец парсинга курсов от Минфин
 	
 // Начало парсинга курсов Нац Банка Казахстана

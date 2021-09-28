@@ -538,12 +538,12 @@ public function admin(&$out) {
 		sg("exchange_rate.eurobyn","");
 	}
 	else if($fileBY) {
-				$xml = $fileBY->xpath("//Currency[@Id='145']");
+				$xml = $fileBY->xpath("//Currency[@Id='431']");
 				$valute = strval($xml[0]->Rate);
 				sg("exchange_rate.dollarbyn",$valute);
 				$out["dollarbyn"]= $valute;
 
-				$xml = $fileBY->xpath("//Currency[@Id='292']");
+				$xml = $fileBY->xpath("//Currency[@Id='451']");
 				$valute = strval($xml[0]->Rate);
 				sg("exchange_rate.eurobyn",$valute);
 				$out["eurobyn"]= $valute;

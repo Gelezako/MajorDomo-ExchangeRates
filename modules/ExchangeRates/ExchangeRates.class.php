@@ -211,31 +211,6 @@ public function SaveAutoUpdate(){
      }
 	 //Конец парсинга Приватбанк АПИ
 	 
-	//Начало парсинга ЦБР
-	$file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-		if (false === $file) {
-		Debmes("Не удалось обновить курс валют Приватбанка");
-		$out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
-		sg("exchange_rate.dollarrur","");
-		sg("exchange_rate.eurorur","");
-	}
-	else if($file) {
-				$xml = $file->xpath("//Valute[@ID='R01235']");
-				$valute = strval($xml[0]->Value);
-				$dollar = str_replace(",",".",$valute);
-				sg("exchange_rate.dollarrur",round((float)$dollar,2));
-				$out["dollarrur"]= round((float)$dollar,2);
-
-				$xml = $file->xpath("//Valute[@ID='R01239']");
-				$valute = strval($xml[0]->Value);
-				$euro = str_replace(",",".",$valute);
-				sg("exchange_rate.eurorur",round((float)$euro,2));
-				$out["dollarrur"]= round((float)$euro,2);
-				
-				sg("exchange_rate.date2",date("Y-m-d H:i:s"));
-				$out["date2"]= date("Y-m-d H:i:s");
-			}
-    //Конец парсинга ЦБР
 			
 	// Начало парсинга курсов от Минфин
 	/*
@@ -289,33 +264,6 @@ public function SaveAutoUpdate(){
 			}
 		}
 	// Конец парсинга курсов Нац Банка Казахстана
-	
-	
-	
-	// Начало парсинга курсов Нац Банка Республики Беларусь
-	$fileBY = simplexml_load_file("http://www.nbrb.by/Services/XmlExRates.aspx");
-		if (false === $fileBY) {
-		Debmes("Не удалось обновить курс валют Нац Банка Республики Беларусь");
-		$out["notification5"]="<#LANG_ER_APP_NOTIF5#>";
-		sg("exchange_rate.dollarbyn","");
-		sg("exchange_rate.eurobyn","");
-	}
-	else if($fileBY) {
-				$xml = $fileBY->xpath("//Currency[@Id='431']");
-				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.dollarbyn",$valute);
-				$out["dollarbyn"]= $valute;
-
-				$xml = $fileBY->xpath("//Currency[@Id='451']");
-				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.eurobyn",$valute);
-				$out["eurobyn"]= $valute;
-				
-				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
-				$out["date5"] = date("Y-m-d H:i:s");
-			}
-	// Конец парсинга курсов Нац Банка Республики Беларусь
-	
 
 	
 }
@@ -413,46 +361,6 @@ public function admin(&$out) {
         }}   
     } //Конец парсинга хмл от ПриватБанка
 
-
-// Начало парсинга ЦБР
-  global $dollarrur,$eurorur;
-  $file = simplexml_load_file("http://www.cbr.ru/scripts/XML_daily.asp?date_req=".date("d/m/Y"));
-    if (!$file) {
-        $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
-		sg("exchange_rate.dollarrur","");
-		sg("exchange_rate.eurorur","");
-		Debmes("Не удалось обновить курс валют");
-        }
-    else if (false === $file) {
-        $out["notification2"]="<#LANG_ER_APP_NOTIF2#>";
-		sg("exchange_rate.dollarrur","");
-		sg("exchange_rate.eurorur","");
-		Debmes("Не удалось обновить курс валют банка России");
-        }		
-     else{ 
-        if(isset($dollarrur)){
-            $xml = $file->xpath("//Valute[@ID='R01235']");
-            $valute = strval($xml[0]->Value);
-            $dollar = str_replace(",",".",$valute);
-            sg("exchange_rate.dollarrur",round((float)$dollar,2));
-            $out["dollarrur"]=round((float)$dollar,2);
-			
-			sg("exchange_rate.date2",date("Y-m-d H:i:s"));
-			$out["date2"]=date("Y-m-d H:i:s");
-        }
-        if(isset($eurorur)){
-            $xml = $file->xpath("//Valute[@ID='R01239']");
-            $valute = strval($xml[0]->Value);
-            $euro = str_replace(",",".",$valute);
-            sg("exchange_rate.eurorur",round((float)$euro,2));
-            $out["eurorur"]=round((float)$euro,2);
-			
-			sg("exchange_rate.date2",date("Y-m-d H:i:s"));
-			$out["date2"]=date("Y-m-d H:i:s");
-        }
-    }
-	
-//Конец парсинга ЦБР
 	
     libxml_clear_errors();
 	libxml_use_internal_errors($use_errors);
@@ -528,30 +436,6 @@ public function admin(&$out) {
 // Конец парсинга курсов Нац Банка Казахстана
 	
 	
-// Начало парсинга курсов Нац Банка Республики Беларусь
-	global $dollarbyn, $eurobyn;
-	$fileBY = simplexml_load_file("http://www.nbrb.by/Services/XmlExRates.aspx");
-		if (false === $fileBY) {
-		Debmes("Не удалось обновить курс валют Нац Банка Республики Беларусь");
-		$out["notification5"]="<#LANG_ER_APP_NOTIF5#>";
-		sg("exchange_rate.dollarbyn","");
-		sg("exchange_rate.eurobyn","");
-	}
-	else if($fileBY) {
-				$xml = $fileBY->xpath("//Currency[@Id='431']");
-				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.dollarbyn",$valute);
-				$out["dollarbyn"]= $valute;
-
-				$xml = $fileBY->xpath("//Currency[@Id='451']");
-				$valute = strval($xml[0]->Rate);
-				sg("exchange_rate.eurobyn",$valute);
-				$out["eurobyn"]= $valute;
-				
-				sg("exchange_rate.date5",date("Y-m-d H:i:s"));
-				$out["date5"] = date("Y-m-d H:i:s");
-			}
-// Конец парсинга курсов Нац Банка Республики Беларусь
 	
 }
 
